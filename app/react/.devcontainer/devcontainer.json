@@ -1,0 +1,34 @@
+{
+    "name": "React via Compose",
+    "dockerComposeFile": ["../../../compose/docker-compose.yml"],
+    "service": "react",
+    "workspaceFolder": "/app",
+    "shutdownAction": "stopCompose",
+    "overrideCommand": true,
+    "remoteEnv": {
+        "NODE_ENV": "development"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "formulahendry.auto-rename-tag",
+                "dsznajder.es7-react-js-snippets",
+                "styled-components.vscode-styled-components",
+                "jpoissonnier.vscode-styled-components-snippets",
+                "yoavbls.pretty-ts-errors",
+                "irongeek.vscode-env"
+            ],
+            "settings": {
+                "editor.formatOnSave": true,
+                "files.trimTrailingWhitespace": true,
+                "files.insertFinalNewline": true,
+                "editor.codeActionsOnSave": {
+                    "source.fixAll.eslint": "explicit"
+                },
+                "editor.defaultFormatter": "esbenp.prettier-vscode"
+            }
+        }
+    }
+}

@@ -1,0 +1,5 @@
+networks:
+    dev-net:
+        name: ${PROJECT_NAME}-dev-net
+        driver: bridge
+        external: false
