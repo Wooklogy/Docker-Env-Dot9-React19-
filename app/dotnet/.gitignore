@@ -1,0 +1,6 @@
+# .gitignore 수정안
+[Bb]in/
+[Oo]bj/
+.devcontainer
+**/appsettings.json
+**/appsettings*.json
