@@ -2,84 +2,76 @@ services:
     # 1. API(Main) Server (HTTP/REST)
     api:
         build:
-            context: ${DOTNET_CONTEXT}
+            context: ../app/dotnet
             dockerfile: Api/Dockerfile
-        # container_name: ${PROJECT_NAME}-api
         working_dir: /workspace
-        volumes:
-            - ${DOTNET_CONTEXT}:/workspace
-            - ./.env:/workspace/.env
         ports:
-            - "${PORT_API}:${PORT_API_TARGET}"
+            - "${PORT_API}:5000"
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
-            - ConnectionStrings__DefaultConnection=Host=postgres;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
-            - Redis__Configuration=redis:${PORT_REDIS_TARGET}
+            - PORT=${PORT_API}
+            - ConnectionStrings__DefaultConnection=Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
+            - Redis__Configuration=${REDIS_HOST}:${REDIS_PORT}
+            - Redis__Name=${REDIS_NAME}
+            - Redis__REDIS_SIGNAL_NAME=${REDIS_SIGNAL_NAME}
+            - AWS__AccessKey=${AWS_ACCESS_KEY}
+            - AWS__SecretKey=${AWS_SECRET_KEY}
+            - AWS__Region=${AWS_REGION}
+            - AWS__BucketName=${AWS_BUCKET_NAME}
+            - Jwt__Key=${JWT_KEY}
+            - Jwt__Issuer=${JWT_ISSUER}
+            - Jwt__Audience=${JWT_AUDIENCE}
+            - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
         depends_on:
             - postgres
             - redis
-        deploy:
-            resources:
-                limits:
-                    cpus: "${CPU_API}"
-                    memory: ${MEM_API}
         networks:
             - dev-net
 
     # 2. Hub Server (WebSocket/SignalR)
     hub:
         build:
-            context: ${DOTNET_CONTEXT}
+            context: ../app/dotnet
             dockerfile: Hub/Dockerfile
-        # container_name: ${PROJECT_NAME}-hub
         working_dir: /workspace
-        volumes:
-            - ${DOTNET_CONTEXT}:/workspace
-            - ./.env:/workspace/.env
         ports:
-            - "${PORT_HUB}:${PORT_HUB_TARGET}"
+            - "${PORT_HUB}:5001"
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
-            - Redis__Configuration=redis:${PORT_REDIS_TARGET}
+            - Redis__Configuration=${REDIS_HOST}:${REDIS_PORT}
+            - Redis__Name=${REDIS_NAME}
+            - Redis__REDIS_SIGNAL_NAME=${REDIS_SIGNAL_NAME}
+            - Jwt__Key=${JWT_KEY}
+            - Jwt__Issuer=${JWT_ISSUER}
+            - Jwt__Audience=${JWT_AUDIENCE}
+            - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+            - PORT=${PORT_HUB}
         depends_on:
             - redis
-        deploy:
-            resources:
-                limits:
-                    cpus: "${CPU_HUB}"
-                    memory: ${MEM_HUB}
         networks:
             - dev-net
 
     # 3. React Frontend (Vite)
     react:
         build:
-            context: ${REACT_CONTEXT}
+            context: ../app/react
             dockerfile: Dockerfile
-        # container_name: ${PROJECT_NAME}-react
         working_dir: /app
-        volumes:
-            - ${REACT_CONTEXT}:/app
-            - /app/node_modules
-        deploy:
-            resources:
-                limits:
-                    cpus: "${CPU_REACT}"
-                    memory: ${MEM_REACT}
+        environment:
+            - VITE_API_URL=${VITE_API_URL}
+            - VITE_HUB_URL=${VITE_HUB_URL}
         networks:
             - dev-net
 
-    # 4. Redis (Shared Backplane)
     redis:
         image: redis:alpine
-        # container_name: ${PROJECT_NAME}-redis
         restart: unless-stopped
         command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
         volumes:
             - redis-data:/data
             - ../redis/redis.conf:/usr/local/etc/redis/redis.conf
         ports:
-            - "${PORT_REDIS}:${PORT_REDIS_TARGET}"
+            - "${PORT_REDIS}:6179"
         networks:
             - dev-net
         deploy:
@@ -88,19 +80,17 @@ services:
                     cpus: "${CPU_REDIS}"
                     memory: ${MEM_REDIS}
 
-    # 5. PostgreSQL (DB)
     postgres:
         image: postgres:14-alpine
-        # container_name: ${PROJECT_NAME}-postgres
         restart: unless-stopped
         environment:
-            POSTGRES_USER: ${POSTGRES_USER}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_DB: ${DB_NAME}
         ports:
-            - "${PORT_POSTGRESQL}:${PORT_POSTGRESQL_TARGET}"
+            - "${PORT_POSTGRESQL}:5432"
         volumes:
-            - ../app/db/data:/var/lib/postgresql/data
+            - db-data:/var/lib/postgresql/data
             - ../app/db/postgres.conf:/etc/postgresql/postgresql.conf
             - ../app/db/ini:/docker-entrypoint-initdb.d
         networks:
@@ -117,3 +107,4 @@ networks:
 
 volumes:
     redis-data:
+    db-data: # DB 데이터를 위한 네임드 볼륨 추가 (로컬 폴더를 어지럽히지 않습니다)
