@@ -60,6 +60,7 @@ services:
         ports:
             - "${PORT_REACT}:5173"
         environment:
+            - VITE_PORT=${PORT_REACT}
             - VITE_API_URL=${VITE_API_URL}
             - VITE_HUB_URL=${VITE_HUB_URL}
         networks:
