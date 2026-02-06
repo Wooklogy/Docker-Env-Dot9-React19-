@@ -3,7 +3,7 @@ services:
     api:
         build:
             context: ../app/dotnet
-            dockerfile: Api/Dockerfile
+            dockerfile: Dockerfile
         working_dir: /workspace
         ports:
             - "${PORT_API}:5000"
@@ -32,7 +32,7 @@ services:
     hub:
         build:
             context: ../app/dotnet
-            dockerfile: Hub/Dockerfile
+            dockerfile: Dockerfile
         working_dir: /workspace
         ports:
             - "${PORT_HUB}:5001"
