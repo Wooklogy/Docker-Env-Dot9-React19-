@@ -9,6 +9,9 @@ services:
             - .env
         ports:
             - "${PORT_API}:5000"
+        volumes:
+            - ~/.ssh:/root/.ssh:ro
+            # - ../app/dotnet:/workspace
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - PORT=${PORT_API}
@@ -40,6 +43,9 @@ services:
             - "${PORT_HUB}:5001"
         env_file:
             - .env
+        volumes:
+            - ~/.ssh:/root/.ssh:ro
+            # - ../app/dotnet:/workspace
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - Redis__Configuration=${REDIS_HOST}:${REDIS_PORT}
@@ -61,6 +67,9 @@ services:
             context: ../app/react
             dockerfile: Dockerfile
         working_dir: /app
+        volumes:
+            - ~/.ssh:/root/.ssh:ro
+            # - ../app/react:/app
         ports:
             - "${PORT_REACT}:5173"
         env_file:
