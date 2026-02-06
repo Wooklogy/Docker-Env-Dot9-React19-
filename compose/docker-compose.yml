@@ -57,6 +57,8 @@ services:
             context: ../app/react
             dockerfile: Dockerfile
         working_dir: /app
+        ports:
+            - "${PORT_REACT}:5173"
         environment:
             - VITE_API_URL=${VITE_API_URL}
             - VITE_HUB_URL=${VITE_HUB_URL}
