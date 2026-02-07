@@ -3,7 +3,7 @@
     "dockerComposeFile": ["../../../compose/docker-compose.yml"],
     "service": "react",
     "workspaceFolder": "/app",
-    "shutdownAction": "stopCompose",
+    "shutdownAction": "none",
     "overrideCommand": true,
     "remoteEnv": {
         "NODE_ENV": "development"
