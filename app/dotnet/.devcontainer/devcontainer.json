@@ -1,31 +1,33 @@
 {
-  "name": ".NET Dev Container",
-  "dockerComposeFile": ["../../../compose/docker-compose.yml"],
-  "service": "api",
-  "workspaceFolder": "/workspace",
-  "shutdownAction": "stopCompose",
-  "overrideCommand": true,
-  "customizations": {
-    "vscode": {
-      "settings": {
-        "dotnet.defaultSolution": "workspace.sln",
-        "csharp.server.useOmnisharp": false,
-        "dotnet.projects.searchSubdirectories": true,
-        "editor.formatOnSave": true,
-        "csharp.inlayHints.enabled": true,
-        "csharp.referencesCodeLens.enabled": false,
-        "csharp.completion.showCompletionItemsFromUnimportedNamespaces": true,
-        "omnisharp.enableMsBuildLoadProjectsOnDemand": false,
-        "omnisharp.autoStart": true
-      },
-      "extensions": [
-        "ms-dotnettools.csharp", // 핵심: C# 기본 확장
-        "ms-dotnettools.csdevkit", // C# Dev Kit
-        "ms-dotnettools.vscode-dotnet-runtime", // .NET 런타임 관리
-        "ms-azuretools.vscode-docker",
-        "jmrog.vscode-nuget-package-manager",
-        "mikestead.dotenv"
-      ]
+    "name": ".NET Dev Container",
+    "dockerComposeFile": ["../../../compose/docker-compose.yml"],
+    "service": "api",
+    "workspaceFolder": "/workspace",
+    "shutdownAction": "stopCompose",
+    "overrideCommand": true,
+    "remoteUser": "node",
+    "runServices": ["dotent"],
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "dotnet.defaultSolution": "workspace.sln",
+                "csharp.server.useOmnisharp": false,
+                "dotnet.projects.searchSubdirectories": true,
+                "editor.formatOnSave": true,
+                "csharp.inlayHints.enabled": true,
+                "csharp.referencesCodeLens.enabled": false,
+                "csharp.completion.showCompletionItemsFromUnimportedNamespaces": true,
+                "omnisharp.enableMsBuildLoadProjectsOnDemand": false,
+                "omnisharp.autoStart": true
+            },
+            "extensions": [
+                "ms-dotnettools.csharp", // 핵심: C# 기본 확장
+                "ms-dotnettools.csdevkit", // C# Dev Kit
+                "ms-dotnettools.vscode-dotnet-runtime", // .NET 런타임 관리
+                "ms-azuretools.vscode-docker",
+                "jmrog.vscode-nuget-package-manager",
+                "mikestead.dotenv"
+            ]
+        }
     }
-  }
 }

@@ -8,6 +8,8 @@
     "remoteEnv": {
         "NODE_ENV": "development"
     },
+    "remoteUser": "node",
+    "runServices": ["react"],
     "customizations": {
         "vscode": {
             "extensions": [

@@ -31,7 +31,7 @@ services:
             - postgres
             - redis
         networks:
-            - dev-net
+            - dev-template-net
 
     # 2. Hub Server (WebSocket/SignalR)
     hub:
@@ -59,7 +59,7 @@ services:
         depends_on:
             - redis
         networks:
-            - dev-net
+            - dev-template-net
 
     # 3. React Frontend (Vite)
     react:
@@ -79,19 +79,19 @@ services:
             - VITE_API_URL=${VITE_API_URL}
             - VITE_HUB_URL=${VITE_HUB_URL}
         networks:
-            - dev-net
+            - dev-template-net
 
     redis:
         image: redis:alpine
         restart: unless-stopped
         command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
         volumes:
-            - redis-data:/data
+            - redis-template-data:/data
             - ../app/redis/redis.conf:/usr/local/etc/redis/redis.conf
         ports:
             - "${PORT_REDIS}:6179"
         networks:
-            - dev-net
+            - dev-template-net
         deploy:
             resources:
                 limits:
@@ -108,11 +108,11 @@ services:
         ports:
             - "${PORT_POSTGRESQL}:5432"
         volumes:
-            - db-data:/var/lib/postgresql/data
+            - db-template-data:/container/path-data:/var/lib/postgresql/data
             - ../app/db/postgres.conf:/etc/postgresql/postgresql.conf
             - ../app/db/ini:/docker-entrypoint-initdb.d
         networks:
-            - dev-net
+            - dev-template-net
         deploy:
             resources:
                 limits:
@@ -120,9 +120,9 @@ services:
                     memory: ${MEM_POSTGRES}
 
 networks:
-    dev-net:
+    dev-template-net:
         driver: bridge
 
 volumes:
-    redis-data:
-    db-data: # DB 데이터를 위한 네임드 볼륨 추가 (로컬 폴더를 어지럽히지 않습니다)
+    redis-template-data:
+    db-template-data: # DB 데이터를 위한 네임드 볼륨 추가 (로컬 폴더를 어지럽히지 않습니다)
