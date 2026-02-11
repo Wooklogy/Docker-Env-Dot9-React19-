@@ -2,7 +2,7 @@ include compose/.env
 export
 
 # Docker Compose 기본 명령어 설정
-COMPOSE_CMD = docker compose -p $(PROJECT_NAME) --env-file compose/.env -f compose/docker-compose.yml -f compose/dev-net.yml
+COMPOSE_CMD = docker compose -p $(COMPOSE_PROJECT_NAME) --env-file compose/.env -f compose/docker-compose.yml -f compose/dev-net.yml
 
 .PHONY: up stop down restart logs clean open-api open-hub open-react open-postgres re-api re-hub re-react re-db
 

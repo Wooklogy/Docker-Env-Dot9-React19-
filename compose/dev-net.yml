@@ -1,5 +1,5 @@
 networks:
     dev-net:
-        name: ${PROJECT_NAME}-dev-net
+        name: ${COMPOSE_PROJECT_NAME}-dev-net
         driver: bridge
         external: false
